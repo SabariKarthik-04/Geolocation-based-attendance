@@ -10,6 +10,7 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 30,),
           const Text(
             'Settings',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
