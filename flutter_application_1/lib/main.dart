@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Login.dart';
+import 'package:flutter_application_1/timeSheet.dart';
 import 'package:go_router/go_router.dart';
 import 'model.dart';
 import 'admin_home_page.dart';
@@ -37,6 +38,13 @@ class _MyAppState extends State<MyApp> {
           return AdminHomePage(data: data);
         },
       ),
+      GoRoute(
+        path: '/Timesheet',
+        builder: (context,state){
+          final MyData data = state.extra as MyData;
+          return Timesheet(data:data);
+        }
+      )
     ],
   );
   

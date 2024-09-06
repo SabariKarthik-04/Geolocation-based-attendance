@@ -214,12 +214,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home',style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),),),
+      appBar: AppBar(
+        title: const Text('Home',
+        style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),),),
         backgroundColor: const Color.fromARGB(255, 77, 79, 79),
         leading: Container(),
         leadingWidth: 12,
         elevation: 6,
-        shadowColor: Colors.blueGrey,),
+        shadowColor: Colors.blueGrey,
+        ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
         child: Column(
@@ -287,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                 Flexible(
                   child: GestureDetector(
                     onTap: () {
-                      
+                      context.push('/Timesheet',extra: widget.data);
                     },
                     child: const SizedBox(
                       height: 100,
