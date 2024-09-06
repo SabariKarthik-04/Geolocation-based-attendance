@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model.dart';
+import 'package:flutter_application_1/settings_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AdminHomePage extends StatefulWidget {
   final MyData data;
-  
-  const AdminHomePage({super.key,required this.data});
+
+  const AdminHomePage({super.key, required this.data});
 
   @override
   State<AdminHomePage> createState() => _AdminHomePageState();
@@ -18,27 +19,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
     setState(() {
       _selectedIndex = index;
     });
-
-    switch (index) {
-      case 0:
-        if(context.mounted){
-          //Do Nothing
-          break;
-        }
-        else{
-          context.push('/AdminHome',extra: widget.data);
-          break;
-        }
-      case 1:
-        print('Settings tapped');
-        break;
-      case 2:
-        _showLogoutConfirmation();
-        break;
-    }
   }
 
-    void _showLogoutConfirmation() {
+  void _showLogoutConfirmation() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -67,152 +50,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Home',style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
-        backgroundColor: const Color.fromARGB(255, 77, 79, 79),
-        leading: Container(),
-        leadingWidth: 12,
-        elevation: 6,
-        shadowColor: Colors.blueGrey,
-      ),
-      body: Padding(
-        padding:const  EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-        child:  Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Add New Employee",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Add New Admin",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Add or Change Geofencing",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Employees Attendance Status",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Update Employee Details",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      
-                    },
-                    child:const SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Dashboard",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+    // Use a list of widgets to switch between pages based on selected index
+    final List<Widget> _pages = [
+      _buildAdminHomeContent(),
+      const SettingsPage(),
+    ];
 
-          ],
-        ),
-      ),
+    return Scaffold(
+      body: _pages[_selectedIndex],  // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -229,7 +74,140 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          if (index == 2) {
+            _showLogoutConfirmation(); // Handle logout separately
+          } else {
+            _onItemTapped(index);  // Handle home/settings navigation
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildAdminHomeContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Add New Employee",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Add New Admin",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Add or Change Geofencing",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Employees Attendance Status",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Update Employee Details",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const SizedBox(
+                    height: 100,
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Dashboard",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
