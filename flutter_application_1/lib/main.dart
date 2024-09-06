@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Login.dart';
+import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/timeSheet.dart';
 import 'package:go_router/go_router.dart';
 import 'model.dart';
@@ -7,7 +8,9 @@ import 'admin_home_page.dart';
 import 'home_page.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotifications.init();
   runApp(MyApp());
 }
 

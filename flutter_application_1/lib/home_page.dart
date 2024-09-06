@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/fetch.dart';
+import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -112,8 +113,8 @@ class _HomePageState extends State<HomePage> {
 
   void getLocationData(){
     if(widget.data.branchId == 1){
-      dummyLattitude = 10.000;
-      dummyLongitude = 10.000;
+      dummyLattitude = 10.9807761;
+      dummyLongitude = 78.0787206;
     }
     else if(widget.data.branchId == 2){
       dummyLattitude = 10.000;
@@ -204,7 +205,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       );
-
+      LocalNotifications.showSimpleNotification(title: "Your Attendance is marked", body: "You are inside the office premesis", payload: "Attendance");
 
     } else {
       print("User is outside the geofence.");

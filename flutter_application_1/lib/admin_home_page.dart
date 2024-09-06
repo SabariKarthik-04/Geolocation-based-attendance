@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
 import 'package:go_router/go_router.dart';
@@ -13,8 +14,8 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  int _selectedIndex = 0;
 
+  int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -48,16 +49,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    // Use a list of widgets to switch between pages based on selected index
     final List<Widget> _pages = [
       _buildAdminHomeContent(),
       const SettingsPage(),
     ];
 
     return Scaffold(
-      body: _pages[_selectedIndex],  // Display the selected page
+      body: _pages[_selectedIndex],  
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -76,15 +77,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
         currentIndex: _selectedIndex,
         onTap: (index) {
           if (index == 2) {
-            _showLogoutConfirmation(); // Handle logout separately
+            _showLogoutConfirmation(); 
           } else {
-            _onItemTapped(index);  // Handle home/settings navigation
+            _onItemTapped(index);  
           }
         },
       ),
     );
   }
 
+  
   Widget _buildAdminHomeContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
@@ -94,7 +96,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
             children: [
               Flexible(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    LocalNotifications.showSimpleNotification(title: "simpleNotification", body: "Just Try", payload: "Sample");
+                  },
                   child: const SizedBox(
                     height: 100,
                     child: Card(
@@ -108,9 +112,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Flexible(
                 child: GestureDetector(
                   onTap: () {},
@@ -129,6 +131,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ),
             ],
           ),
+          const SizedBox(height: 20), 
           Row(
             children: [
               Flexible(
@@ -147,9 +150,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Flexible(
                 child: GestureDetector(
                   onTap: () {},
@@ -168,6 +169,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ),
             ],
           ),
+          const SizedBox(height: 20),  
           Row(
             children: [
               Flexible(
@@ -186,9 +188,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Flexible(
                 child: GestureDetector(
                   onTap: () {},
