@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,30 +16,25 @@ import com.example.demo.service.impl.AttendanceDBServiceImpl;
 
 @RestController
 @RequestMapping("/UserAttendance")
-public class AttendanceDBcontroller {
+public class AttendanceDBController {
     
     @Autowired
     private AttendanceDBServiceImpl AttService;
     
     @PostMapping("/SaveUserAttendance")
-    public ResponseEntity<?> saveUserAttendance(@RequestBody AttendanceDBModel attendance) {
+    public ResponseEntity<String> saveUserAttendance(@RequestBody AttendanceDBModel attendance) {
         String response = AttService.saveAttendance(attendance);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-    
-    @GetMapping("/GetUserById/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable int userId) {
-        AttendanceDBModel response = AttService.getAttendanceById(userId);
-        if (response != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+        if ("Attendance saved successfully.".equals(response)) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No attendance record found for userId: " + userId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
     
+
     @GetMapping("/GetAllByUserID/{userId}")
     public ResponseEntity<?> getAllUserById(@PathVariable int userId) {
-        List<AttendanceDBModel> response = AttService.getAttendancesByuserId(userId);
+        List<AttendanceDBModel> response = AttService.getAttendancesByUserId(userId);
         if (response != null && !response.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {

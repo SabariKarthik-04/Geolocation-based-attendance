@@ -5,8 +5,7 @@ import org.springframework.data.annotation.Id;
 @Document(collection = "UserAttendance")
 public class AttendanceDBModel {
 
-    @Id
-    private int attId;
+    
     private int userId;
     private String userName;
     private String date;
@@ -14,13 +13,6 @@ public class AttendanceDBModel {
     private AutomatedGeoAttendance autoGeoAttendance;
     private ManualAttendance manualGeoAttendance;
 
-    public int getAttId() {
-		return attId;
-	}
-
-	public void setAttId(int attId) {
-		this.attId = attId;
-	}
 
 	public int getUserId() {
         return userId;
@@ -65,7 +57,7 @@ public class AttendanceDBModel {
    
     @Override
 	public String toString() {
-		return "AttendanceDBModel [attId=" + attId + ", userId=" + userId + ", userName=" + userName + ", date=" + date
+		return "AttendanceDBModel [userId=" + userId + ", userName=" + userName + ", date=" + date
 				+ ", autoGeoAttendance=" + autoGeoAttendance + ", manualGeoAttendance=" + manualGeoAttendance + "]";
 	}
 
