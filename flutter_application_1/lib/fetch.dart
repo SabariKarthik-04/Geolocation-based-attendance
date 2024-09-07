@@ -56,7 +56,7 @@ Future<OfficeLocationData> getOfficeLocation(int branchId) async{
 }
 
 Future<UserAttendance> newUserAttendance(UserAttendance attendance) async{
-  final String url ='https';
+  final String url ='https://5knw6stl-8080.inc1.devtunnels.ms/UserAttendance/SaveUserAttendance';
   Map<String,dynamic> jsonData = attendance.toJson();
   final response = await http.post(
     Uri.parse(url),
@@ -64,12 +64,32 @@ Future<UserAttendance> newUserAttendance(UserAttendance attendance) async{
     body: jsonEncode(jsonData)
   );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
     print('Attendance data sent successfully');
     return attendance;
   } else {
     print('Failed to send attendance data: ${response.statusCode}');
     throw Exception('Failed to send attendance data');
   }
+}
+Future<UserData> getUserData(int Id)async{
+  final response = await http.get(
+    Uri.parse('https://5knw6stl-8080.inc1.devtunnels.ms/UserData/getUserDataById/${Id}'),
+    headers: {'Content-Type': 'application/json'},
+  );
 
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return UserData(
+          userId: jsonResponse['userId'], 
+          userName: jsonResponse['userName'], 
+          userMobileNumber: jsonResponse['userMobileNumber'], 
+          userMail: jsonResponse['userMail'], 
+          userDOB: jsonResponse['userDOB'], 
+          userPosting: jsonResponse['userPosting'],
+          );
+  } else {
+    print('Failed to Fetch Data: ${response.statusCode}');
+    throw Exception('Failed to Fetch Data');
+  }
 }

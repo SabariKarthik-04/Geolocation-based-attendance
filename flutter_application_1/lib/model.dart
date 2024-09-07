@@ -38,25 +38,31 @@ class OfficeLocationData{
 
 }
 
-class UserAttendance {
+class UserData {
   final int userId;
   final String userName;
-  final GeoAttendance autoGeoAttendance;
-  final GeoAttendance manualGeoAttendance;
+  final String userMobileNumber;
+  final String userMail;
+  final String userDOB;
+  final String userPosting;
 
-  UserAttendance({
+  UserData({
     required this.userId,
     required this.userName,
-    required this.autoGeoAttendance,
-    required this.manualGeoAttendance,
+    required this.userMobileNumber,
+    required this.userMail,
+    required this.userDOB,
+    required this.userPosting,
   });
 
-  factory UserAttendance.fromJson(Map<String, dynamic> json) {
-    return UserAttendance(
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
       userId: json['userId'],
       userName: json['userName'],
-      autoGeoAttendance: GeoAttendance.fromJson(json['autoGeoAttendance']),
-      manualGeoAttendance: GeoAttendance.fromJson(json['manualGeoAttendance']),
+      userMobileNumber: json['userMobileNumber'],
+      userMail: json['userMail'],
+      userDOB: json['userDOB'],
+      userPosting: json['userPosting'],
     );
   }
 
@@ -64,36 +70,133 @@ class UserAttendance {
     return {
       'userId': userId,
       'userName': userName,
-      'autoGeoAttendance': autoGeoAttendance.toJson(),
-      'manualGeoAttendance': manualGeoAttendance.toJson(),
+      'userMobileNumber': userMobileNumber,
+      'userMail': userMail,
+      'userDOB': userDOB,
+      'userPosting': userPosting,
     };
   }
 }
+class UserAttendance {
+  final int userId;
+  final String userName;
+  final String date;
+  final AutomatedGeoAttendance? autoGeoAttendance;
+  final ManualAttendance? manualGeoAttendance;
 
-class GeoAttendance {
-  final String? checkIn;
-  final String? checkOut;
-  final double? totalHours;
-
-  GeoAttendance({
-    required this.checkIn,
-    this.checkOut,
-    this.totalHours,
+  UserAttendance({
+    required this.userId,
+    required this.userName,
+    required this.date,
+    this.autoGeoAttendance,
+    this.manualGeoAttendance,
   });
 
-  factory GeoAttendance.fromJson(Map<String, dynamic> json) {
-    return GeoAttendance(
-      checkIn: json['geoCheckIn'] ?? json['manualCheckIn'],
-      checkOut: json['geoCheckOut'] ?? json['manualCheckOut'],
-      totalHours: json['geoTotalHours'] ?? json['manualTotalHours'],
+  factory UserAttendance.fromJson(Map<String, dynamic> json) {
+    return UserAttendance(
+      userId: json['userId'],
+      userName: json['userName'],
+      date: json['date'],
+      autoGeoAttendance: json['autoGeoAttendance'] != null
+          ? AutomatedGeoAttendance.fromJson(json['autoGeoAttendance'])
+          : null,
+      manualGeoAttendance: json['manualGeoAttendance'] != null
+          ? ManualAttendance.fromJson(json['manualGeoAttendance'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'geoCheckIn': checkIn,
-      'geoCheckOut': checkOut,
-      'geoTotalHours': totalHours,
+    final data = {
+      'userId': userId,
+      'userName': userName,
+      'date': date,
     };
+
+    if (autoGeoAttendance != null) {
+      data['autoGeoAttendance'] = autoGeoAttendance!.toJson();
+    }
+
+    if (manualGeoAttendance != null) {
+      data['manualGeoAttendance'] = manualGeoAttendance!.toJson();
+    }
+
+    return data;
+  }
+}
+
+class AutomatedGeoAttendance {
+  final String? geoCheckIn;
+  final String? geoCheckOut;
+  final double? geoTotalHours;
+
+  AutomatedGeoAttendance({
+    this.geoCheckIn,
+    this.geoCheckOut,
+    this.geoTotalHours,
+  });
+
+  factory AutomatedGeoAttendance.fromJson(Map<String, dynamic> json) {
+    return AutomatedGeoAttendance(
+      geoCheckIn: json['geoCheckIn'],
+      geoCheckOut: json['geoCheckOut'],
+      geoTotalHours: json['geoTotalHours']?.toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+
+    if (geoCheckIn != null) {
+      data['geoCheckIn'] = geoCheckIn;
+    }
+
+    if (geoCheckOut != null) {
+      data['geoCheckOut'] = geoCheckOut;
+    }
+
+    if (geoTotalHours != null) {
+      data['geoTotalHours'] = geoTotalHours;
+    }
+
+    return data;
+  }
+}
+
+class ManualAttendance {
+  final String? manualCheckIn;
+  final String? manualCheckOut;
+  final double? manualTotalHours;
+
+  ManualAttendance({
+    this.manualCheckIn,
+    this.manualCheckOut,
+    this.manualTotalHours,
+  });
+
+  factory ManualAttendance.fromJson(Map<String, dynamic> json) {
+    return ManualAttendance(
+      manualCheckIn: json['manualCheckIn'],
+      manualCheckOut: json['manualCheckOut'],
+      manualTotalHours: json['manualTotalHours']?.toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+
+    if (manualCheckIn != null) {
+      data['manualCheckIn'] = manualCheckIn;
+    }
+
+    if (manualCheckOut != null) {
+      data['manualCheckOut'] = manualCheckOut;
+    }
+
+    if (manualTotalHours != null) {
+      data['manualTotalHours'] = manualTotalHours;
+    }
+
+    return data;
   }
 }

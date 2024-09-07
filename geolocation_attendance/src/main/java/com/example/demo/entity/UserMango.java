@@ -1,11 +1,9 @@
 package com.example.demo.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
-@Entity
 @Document(collection = "Users")
 public class UserMango {
 	@Id
