@@ -2,10 +2,9 @@ package com.example.demo.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity
+
 @Document(collection = "Users")
 public class UserMango {
 	@Id
