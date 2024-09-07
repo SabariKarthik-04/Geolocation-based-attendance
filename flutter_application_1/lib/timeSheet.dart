@@ -13,22 +13,17 @@ class _TimesheetState extends State<Timesheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Timesheet',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color.fromARGB(255, 77, 79, 79),
-        leading: Container(),
-        leadingWidth: 12,
-        elevation: 6,
-        shadowColor: Colors.blueGrey,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Date Row
+            const SizedBox(height: 30,),
+          const Text(
+            'TimeSheet',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20,),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
@@ -50,6 +45,7 @@ class _TimesheetState extends State<Timesheet> {
                   columnWidths: {
                     0: FlexColumnWidth(),
                     1: FlexColumnWidth(),
+                    2:FlexColumnWidth(),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: [
@@ -57,10 +53,10 @@ class _TimesheetState extends State<Timesheet> {
                     TableRow(
                       decoration: BoxDecoration(color: Colors.grey[300]),
                       children: [
-                        Padding(
+                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            'Header 1',
+                            ' ',
                             style: TextStyle(fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
@@ -68,7 +64,15 @@ class _TimesheetState extends State<Timesheet> {
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            'Header 2',
+                            'Manual Attendance',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Automated Attendance',
                             style: TextStyle(fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
@@ -78,6 +82,15 @@ class _TimesheetState extends State<Timesheet> {
                     // Data Rows
                     TableRow(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text('Check-IN',
+                            textAlign: TextAlign.center,style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text('Row 1, Col 1'),
@@ -90,6 +103,14 @@ class _TimesheetState extends State<Timesheet> {
                     ),
                     TableRow(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text('Check-OUT',textAlign: TextAlign.center,style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text('Row 2, Col 1'),

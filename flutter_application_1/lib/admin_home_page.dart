@@ -54,7 +54,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       _buildAdminHomeContent(),
-      const SettingsPage(),
+      SettingsPage(data: widget.data),
     ];
 
     return Scaffold(
