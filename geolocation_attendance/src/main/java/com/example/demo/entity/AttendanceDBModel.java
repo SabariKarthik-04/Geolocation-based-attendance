@@ -1,28 +1,28 @@
 package com.example.demo.entity;
-
-import java.time.LocalDateTime;
-
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-@Entity
-@Document(collection  = "UserAttendance")
+@Document(collection = "UserAttendance")
 public class AttendanceDBModel {
+
     @Id
+    private int attId;
     private int userId;
     private String userName;
+    private String date;
     
-    @Embedded
     private AutomatedGeoAttendance autoGeoAttendance;
-    
-    @Embedded
     private ManualAttendance manualGeoAttendance;
 
-    public int getUserId() {
+    public int getAttId() {
+		return attId;
+	}
+
+	public void setAttId(int attId) {
+		this.attId = attId;
+	}
+
+	public int getUserId() {
         return userId;
     }
 
@@ -36,6 +36,14 @@ public class AttendanceDBModel {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public AutomatedGeoAttendance getAutoGeoAttendance() {
@@ -54,31 +62,32 @@ public class AttendanceDBModel {
         this.manualGeoAttendance = manualGeoAttendance;
     }
 
+   
     @Override
-    public String toString() {
-        return "AttendanceDBModel [userId=" + userId + ", userName=" + userName + ", autoGeoAttendance="
-                + autoGeoAttendance + ", manualGeoAttendance=" + manualGeoAttendance + "]";
-    }
+	public String toString() {
+		return "AttendanceDBModel [attId=" + attId + ", userId=" + userId + ", userName=" + userName + ", date=" + date
+				+ ", autoGeoAttendance=" + autoGeoAttendance + ", manualGeoAttendance=" + manualGeoAttendance + "]";
+	}
 
-    @Embeddable
-    public static class AutomatedGeoAttendance {
-        private LocalDateTime geoCheckIn;
-        private LocalDateTime geoCheckOut;
+
+	public static class AutomatedGeoAttendance {
+        private String geoCheckIn;
+        private String geoCheckOut;
         private double geoTotalHours;
 
-        public LocalDateTime getGeoCheckIn() {
+        public String getGeoCheckIn() {
             return geoCheckIn;
         }
 
-        public void setGeoCheckIn(LocalDateTime geoCheckIn) {
+        public void setGeoCheckIn(String geoCheckIn) {
             this.geoCheckIn = geoCheckIn;
         }
 
-        public LocalDateTime getGeoCheckOut() {
+        public String getGeoCheckOut() {
             return geoCheckOut;
         }
 
-        public void setGeoCheckOut(LocalDateTime geoCheckOut) {
+        public void setGeoCheckOut(String geoCheckOut) {
             this.geoCheckOut = geoCheckOut;
         }
 
@@ -97,25 +106,24 @@ public class AttendanceDBModel {
         }
     }
 
-    @Embeddable
     public static class ManualAttendance {
-        private LocalDateTime manualCheckIn;
-        private LocalDateTime manualCheckOut;
+        private String manualCheckIn;
+        private String manualCheckOut;
         private double manualTotalHours;
 
-        public LocalDateTime getManualCheckIn() {
+        public String getManualCheckIn() {
             return manualCheckIn;
         }
 
-        public void setManualCheckIn(LocalDateTime manualCheckIn) {
+        public void setManualCheckIn(String manualCheckIn) {
             this.manualCheckIn = manualCheckIn;
         }
 
-        public LocalDateTime getManualCheckOut() {
+        public String getManualCheckOut() {
             return manualCheckOut;
         }
 
-        public void setManualCheckOut(LocalDateTime manualCheckOut) {
+        public void setManualCheckOut(String manualCheckOut) {
             this.manualCheckOut = manualCheckOut;
         }
 
