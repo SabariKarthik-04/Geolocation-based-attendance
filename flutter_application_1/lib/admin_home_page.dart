@@ -87,9 +87,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   Widget _buildAdminHomeContent() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
       child: Column(
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+          child: const Text(
+            'Admin Home Page',          
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          ),
           Row(
             children: [
               Flexible(
