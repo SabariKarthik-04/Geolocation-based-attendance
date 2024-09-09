@@ -93,3 +93,22 @@ Future<UserData> getUserData(int Id)async{
     throw Exception('Failed to Fetch Data');
   }
 }
+
+Future<List<UserAttendance>> getUserAttendanceData(int userId)async{
+  final response = await http.get(
+    Uri.parse('https://5knw6stl-8080.inc1.devtunnels.ms/UserAttendance/GetAllByUserID/${userId}'),
+    headers: {'Content-Type': 'application/json'},
+  );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      if(jsonResponse is List){
+        return jsonResponse.map<UserAttendance>((data) => UserAttendance.fromJson(data)).toList();
+      }else{
+        return [UserAttendance.fromJson(jsonResponse)];
+      }
+  } else {
+    print('Failed to Fetch User Attendance Data: ${response.statusCode}');
+    throw Exception('Failed to Fetch Attendance Data');
+  }
+}

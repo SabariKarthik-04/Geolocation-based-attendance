@@ -19,13 +19,16 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+     if (index == 2) {
+      _showLogoutConfirmation();
+    }
+    else{
     setState(() {
       _selectedIndex = index;
     });
-
-    if (index == 2) {
-      _showLogoutConfirmation();
     }
+
+   
   }
 
   void _showLogoutConfirmation() {
@@ -142,6 +145,37 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> autoCheckOut() async {
+    try {
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+      String formattedTime = DateFormat('HH:mm:ss').format(now);
+      UserAttendance userAttendance = UserAttendance(
+        userId: widget.data.id,
+        userName: widget.data.username,
+        date: formattedDate,
+        autoGeoAttendance: AutomatedGeoAttendance(
+          geoCheckIn: null,
+          geoCheckOut: formattedTime,
+          geoTotalHours: null,
+        ),
+        manualGeoAttendance: ManualAttendance(
+          manualCheckIn: null,
+          manualCheckOut: null,
+          manualTotalHours: null,
+        ),
+      );
+      await newUserAttendance(userAttendance);
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to check in. Please try again.")),
+      );
+      return false;
+    }
+  }
+
+
   void checkGeofence(double latitude, double longitude, BuildContext context)async {
     double geofenceLat = dummyLattitude;
     double geofenceLon = dummyLongitude;
@@ -186,8 +220,15 @@ class _HomePageState extends State<HomePage> {
             actions: [
               TextButton(
                 child: const Text("Check-Out"),
-                onPressed: () {
-                  
+                onPressed: ()async {
+                  if(await autoCheckOut()){
+                    LocalNotifications.showSimpleNotification(
+                      title: "Your CheckOut is marked",
+                      body: "Bye Bye See You Tommorow!!<3",
+                      payload: "Attendance"
+                    );
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
               TextButton(
@@ -200,6 +241,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       );
+      
     }
   }
 
