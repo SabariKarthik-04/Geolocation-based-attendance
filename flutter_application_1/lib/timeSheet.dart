@@ -75,7 +75,7 @@ class _TimesheetState extends State<Timesheet> {
                             },
                             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                             children: [
-                              // Headers Row
+                              
                               TableRow(
                                 decoration: BoxDecoration(color: Colors.grey[300]),
                                 children: [

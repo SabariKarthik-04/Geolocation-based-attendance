@@ -31,7 +31,8 @@ Future<MyData> authenticateUser(String username, String password) async {
       username: jsonResponse['username'],
       password: jsonResponse['password'],
       admin: isAdmin,
-      branchId: jsonResponse['branchId']
+      branchId: jsonResponse['branchId'],
+      expiryDate: jsonResponse['ExpiryDate']
     );
   } else {
     throw Exception('Failed to authenticate user');
