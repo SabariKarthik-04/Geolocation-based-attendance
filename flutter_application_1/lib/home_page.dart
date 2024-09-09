@@ -1,11 +1,13 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/fetch.dart';
 import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   final MyData data;
@@ -18,13 +20,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void initState() {
+    super.initState();
+    initLocationService();
+  }
 
+  void _onItemTapped(int index) {
     if (index == 2) {
       _showLogoutConfirmation();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
     }
   }
 
@@ -46,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text("Logout"),
               onPressed: () {
                 Navigator.of(context).pop();
-                GoRouter.of(context).go('/');
+                logout();
               },
             ),
           ],
@@ -55,10 +63,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initLocationService();
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final _storage = FlutterSecureStorage();
+    await prefs.setBool('isLoggedIn', false);
+    await _storage.deleteAll();
+    context.pushReplacement('/');
   }
 
   void initLocationService() async {
@@ -95,19 +105,19 @@ class _HomePageState extends State<HomePage> {
     checkGeofence(position.latitude, position.longitude, context);
   }
 
-  late double dummyLattitude;
+  late double dummyLatitude;
   late double dummyLongitude;
 
   void getLocationData() {
     if (widget.data.branchId == 1) {
-      dummyLattitude = 10.9807761;
+      dummyLatitude = 10.9807761;
       dummyLongitude = 78.0787206;
     } else if (widget.data.branchId == 2) {
-      dummyLattitude = 10.000;
+      dummyLatitude = 10.000;
       dummyLongitude = 10.000;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Data For Your Branch Is Not Available. Please Contact Your Admin.")),
+        const SnackBar(content: Text("Data for your branch is not available. Please contact your admin.")),
       );
     }
   }
@@ -142,8 +152,38 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void checkGeofence(double latitude, double longitude, BuildContext context)async {
-    double geofenceLat = dummyLattitude;
+  Future<bool> autoCheckOut() async {
+    try {
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd-MM-yyyy').format(now);
+      String formattedTime = DateFormat('HH:mm:ss').format(now);
+      UserAttendance userAttendance = UserAttendance(
+        userId: widget.data.id,
+        userName: widget.data.username,
+        date: formattedDate,
+        autoGeoAttendance: AutomatedGeoAttendance(
+          geoCheckIn: null,
+          geoCheckOut: formattedTime,
+          geoTotalHours: null,
+        ),
+        manualGeoAttendance: ManualAttendance(
+          manualCheckIn: null,
+          manualCheckOut: null,
+          manualTotalHours: null,
+        ),
+      );
+      await newUserAttendance(userAttendance);
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to check out. Please try again.")),
+      );
+      return false;
+    }
+  }
+
+  void checkGeofence(double latitude, double longitude, BuildContext context) async {
+    double geofenceLat = dummyLatitude;
     double geofenceLon = dummyLongitude;
     const double geofenceRadius = 200.0;
 
@@ -151,48 +191,53 @@ class _HomePageState extends State<HomePage> {
         latitude, longitude, geofenceLat, geofenceLon);
 
     if (distance <= geofenceRadius) {
-      
-      if(await autoCheckin()){
+      if (await autoCheckin()) {
         showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Attendance"),
-            content: const Text("Your attendance has been marked successfully."),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      LocalNotifications.showSimpleNotification(
-          title: "Your Attendance is marked",
-          body: "You are inside the office premises",
-          payload: "Attendance");
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Attendance"),
+              content: const Text("Your attendance has been marked successfully."),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        LocalNotifications.showSimpleNotification(
+            title: "Your Attendance is marked",
+            body: "You are inside the office premises",
+            payload: "Attendance");
       }
-      
     } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Check-Out"),
-            content: const Text("You are outside the office premesis Do you want to check-Out."),
+            content: const Text("You are outside the office premises. Do you want to check out?"),
             actions: [
               TextButton(
                 child: const Text("Check-Out"),
-                onPressed: () {
-                  
+                onPressed: () async {
+                  if (await autoCheckOut()) {
+                    LocalNotifications.showSimpleNotification(
+                      title: "Your Check-Out is marked",
+                      body: "Bye bye, see you tomorrow!",
+                      payload: "Attendance"
+                    );
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
               TextButton(
                 child: const Text('Close'),
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
@@ -207,7 +252,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       _buildHomeContent(),
-      SettingsPage(data:widget.data),
+      SettingsPage(data: widget.data),
     ];
 
     return Scaffold(
@@ -239,12 +284,12 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30,),
+          const SizedBox(height: 30),
           const Text(
             'Home',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(height: 20),
           Row(
             children: [
               Flexible(
@@ -267,7 +312,7 @@ class _HomePageState extends State<HomePage> {
               Flexible(
                 child: GestureDetector(
                   onTap: () {
-                    context.push('/ManualAttendance',extra: widget.data);
+                    context.push('/ManualAttendance', extra: widget.data);
                   },
                   child: const SizedBox(
                     height: 100,
