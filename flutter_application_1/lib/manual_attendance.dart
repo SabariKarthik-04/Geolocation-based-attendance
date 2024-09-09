@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For formatting date and time
+import 'package:intl/intl.dart';
 import 'package:flutter_application_1/model.dart';
+import 'dart:ui' as ui;
 
 class UserManualAttendance extends StatefulWidget {
   final MyData data;
@@ -17,9 +17,8 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
   String? _checkInTime;
   String? _checkOutTime;
 
-  // Function to show confirmation dialog
   Future<void> _showConfirmationDialog(String action) async {
-    final formattedTime = DateFormat('hh:mm a').format(_currentTime); // Use current time from the clock
+    final formattedTime = DateFormat('hh:mm a').format(_currentTime);
 
     return showDialog<void>(
       context: context,
@@ -31,7 +30,7 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog without action
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
@@ -44,7 +43,7 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
                     _checkOutTime = formattedTime;
                   }
                 });
-                Navigator.of(context).pop(); // Close dialog and confirm action
+                Navigator.of(context).pop();
               },
               child: Text('Confirm'),
             ),
@@ -75,7 +74,6 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
             ),
             const SizedBox(height: 40),
 
-            // Check-In Button
             ElevatedButton(
               onPressed: () {
                 _showConfirmationDialog('Check In');
@@ -84,7 +82,6 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
             ),
             const SizedBox(height: 20),
 
-            // Check-Out Button
             ElevatedButton(
               onPressed: () {
                 _showConfirmationDialog('Check Out');
@@ -124,14 +121,15 @@ class _AnalogClockState extends State<AnalogClock> {
 
   // Function to update angles based on the time
   void _updateAnglesFromTime(DateTime time) {
-    _hourAngle = ((time.hour % 12) + time.minute / 60) * pi / 6;
-    _minuteAngle = time.minute * pi / 30;
+    // Adjust the angles for both the hour and minute hands
+    _hourAngle = ((time.hour % 12) + time.minute / 60) * pi / 6 - (pi / 2);
+    _minuteAngle = time.minute * pi / 30 - (pi / 2);
   }
 
   // Function to calculate time based on the angles
   DateTime _calculateTimeFromAngles() {
-    int hour = ((_hourAngle * 6 / pi).round() % 12);
-    int minute = ((_minuteAngle * 30 / pi).round() % 60);
+    int hour = (((_hourAngle + pi / 2) * 6 / pi).round() % 12);
+    int minute = (((_minuteAngle + pi / 2) * 30 / pi).round() % 60);
     return DateTime(
       widget.currentTime.year,
       widget.currentTime.month,
@@ -159,19 +157,17 @@ class _AnalogClockState extends State<AnalogClock> {
         final double angle = atan2(dy, dx);
 
         setState(() {
-          if (details.localPosition.distance <= 100) {
-            // Update the hour hand if dragging near the center
-            _hourAngle = angle;
-          } else {
-            // Update the minute hand if dragging farther from the center
+                    
             _minuteAngle = angle;
+            // Adjust hour hand accordingly as the minute hand moves
+            _hourAngle = ((angle + pi / 2) / 6) + ((_hourAngle + pi / 2) % (pi * 2));
           }
-        });
+        );
 
         _updateTime();
       },
       child: CustomPaint(
-        size: Size(300, 300),
+        size: const Size(300, 300),
         painter: _ClockPainter(_hourAngle, _minuteAngle),
       ),
     );
@@ -197,17 +193,25 @@ class _ClockPainter extends CustomPainter {
     canvas.drawCircle(center, radius, clockCircle);
 
     // Draw hour markers
-    final Paint hourMarkerPaint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 4;
+    final TextPainter textPainter = TextPainter(
+      textAlign: TextAlign.center,
+      textDirection: ui.TextDirection.ltr,
+    );
 
-    for (int i = 0; i < 12; i++) {
-      final double angle = i * pi / 6;
-      final double startX = center.dx + radius * 0.9 * cos(angle);
-      final double startY = center.dy + radius * 0.9 * sin(angle);
-      final double endX = center.dx + radius * 0.8 * cos(angle);
-      final double endY = center.dy + radius * 0.8 * sin(angle);
-      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), hourMarkerPaint);
+    for (int i = 1; i <= 12; i++) {
+      final double angle = (i * pi / 6) - pi / 2;
+      final double x = center.dx + radius * 0.75 * cos(angle);
+      final double y = center.dy + radius * 0.75 * sin(angle);
+
+      textPainter.text = TextSpan(
+        text: '$i',
+        style: const TextStyle(
+          fontSize: 24,
+          color: Colors.black,
+        ),
+      );
+      textPainter.layout();
+      textPainter.paint(canvas, Offset(x - textPainter.width / 2, y - textPainter.height / 2));
     }
 
     // Draw hour hand
