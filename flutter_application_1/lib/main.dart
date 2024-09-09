@@ -9,20 +9,20 @@ import 'model.dart';
 import 'admin_home_page.dart';
 import 'home_page.dart';
 
-
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  // Ensures that widgets are initialized before locking orientation.
+  
+  // Initialize the local notifications
   await LocalNotifications.init();
-void main() {
-   WidgetsFlutterBinding.ensureInitialized(); // Ensures widgets are initialized before locking orientation
 
+  // Lock device orientation to portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,    // Lock to portrait up mode
     DeviceOrientation.portraitDown,  // (Optional) Allow upside-down portrait
   ]).then((_) {
-  runApp(MyApp());
-
-  }); 
+    // Run the app
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -31,7 +31,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
   final GoRouter _router = GoRouter(
     routes: [
       GoRoute(
@@ -43,7 +42,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, state) {
           final MyData data = state.extra as MyData;
           return HomePage(data: data);
-        }
+        },
       ),
       GoRoute(
         path: '/AdminHome',
@@ -54,21 +53,21 @@ class _MyAppState extends State<MyApp> {
       ),
       GoRoute(
         path: '/Timesheet',
-        builder: (context,state){
+        builder: (context, state) {
           final MyData data = state.extra as MyData;
-          return Timesheet(data:data);
-        }
+          return Timesheet(data: data);
+        },
       ),
       GoRoute(
         path: '/ManualAttendance',
         builder: (context, state) {
           final MyData data = state.extra as MyData;
-          return UserManualAttendance(data:data);
+          return UserManualAttendance(data: data);
         },
-      )
+      ),
     ],
   );
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -77,6 +76,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-
