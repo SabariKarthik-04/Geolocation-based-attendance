@@ -98,128 +98,113 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   Widget _buildAdminHomeContent() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
       child: Column(
         children: [
-          Row(
-            children: [
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Add New Employee",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Add New Admin",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 30),
+          const Text(
+            'Admin Home',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          Row(
-            children: [
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Add or Change Geofencing",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Employees Attendance Status",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 20),
+          _buildActionRow(
+            addEmployee,
+            addAdmin,
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: addEmployee,
+                body: "Functionality to add a new employee.",
+                payload: "AddEmployee"
+              );
+            },
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: addAdmin,
+                body: "Functionality to add a new admin.",
+                payload: "AddAdmin"
+              );
+            }
           ),
-          Row(
-            children: [
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Update Employee Details",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const SizedBox(
-                    height: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Dashboard",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 20),
+          _buildActionRow(
+            geofencing,
+            attendanceStatus,
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: geofencing,
+                body: "Functionality to add or change geofencing.",
+                payload: "Geofencing"
+              );
+            },
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: attendanceStatus,
+                body: "Functionality to view employees' attendance status.",
+                payload: "AttendanceStatus"
+              );
+            }
+          ),
+          const SizedBox(height: 20),
+          _buildActionRow(
+            updateEmployee,
+            dashboard,
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: updateEmployee,
+                body: "Functionality to update employee details.",
+                payload: "UpdateEmployee"
+              );
+            },
+            () {
+              LocalNotifications.showSimpleNotification(
+                title: dashboard,
+                body: "Functionality to view dashboard.",
+                payload: "Dashboard"
+              );
+            }
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildActionRow(String title1, String title2, VoidCallback onTap1, VoidCallback onTap2) {
+    return Row(
+      children: [
+        Flexible(
+          child: GestureDetector(
+            onTap: onTap1,
+            child: SizedBox(
+              height: 100,
+              child: Card(
+                child: Center(
+                  child: Text(
+                    title1,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Flexible(
+          child: GestureDetector(
+            onTap: onTap2,
+            child: SizedBox(
+              height: 100,
+              child: Card(
+                child: Center(
+                  child: Text(
+                    title2,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
