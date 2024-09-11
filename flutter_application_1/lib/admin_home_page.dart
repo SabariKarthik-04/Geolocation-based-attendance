@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
 import 'package:go_router/go_router.dart';
@@ -108,18 +109,18 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
           const SizedBox(height: 20),
           _buildActionRow(
-            addEmployee,
-            addAdmin,
+            "addEmployee",
+            "addAdmin",
             () {
               LocalNotifications.showSimpleNotification(
-                title: addEmployee,
+                title: "addEmployee",
                 body: "Functionality to add a new employee.",
                 payload: "AddEmployee"
               );
             },
             () {
               LocalNotifications.showSimpleNotification(
-                title: addAdmin,
+                title: "addAdmin",
                 body: "Functionality to add a new admin.",
                 payload: "AddAdmin"
               );
@@ -127,18 +128,18 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
           const SizedBox(height: 20),
           _buildActionRow(
-            geofencing,
-            attendanceStatus,
+            "geofencing",
+            "attendanceStatus",
             () {
               LocalNotifications.showSimpleNotification(
-                title: geofencing,
+                title: "geofencing",
                 body: "Functionality to add or change geofencing.",
                 payload: "Geofencing"
               );
             },
             () {
               LocalNotifications.showSimpleNotification(
-                title: attendanceStatus,
+                title: "attendanceStatus",
                 body: "Functionality to view employees' attendance status.",
                 payload: "AttendanceStatus"
               );
@@ -146,19 +147,19 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
           const SizedBox(height: 20),
           _buildActionRow(
-            updateEmployee,
-            dashboard,
+            "updateEmployee",
+            "dashboard",
             () {
               
               LocalNotifications.showSimpleNotification(
-                title: updateEmployee,
+                title: "updateEmployee",
                 body: "Functionality to update employee details.",
                 payload: "UpdateEmployee"
               );
             },
             () {
               LocalNotifications.showSimpleNotification(
-                title: dashboard,
+                title: "dashboard",
                 body: "Functionality to view dashboard.",
                 payload: "Dashboard"
               );
