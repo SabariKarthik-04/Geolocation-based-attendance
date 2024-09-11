@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       _buildHomeContent(),
-      SettingsPage(data: widget.data),
+      SettingsPage(data: widget.data,),
     ];
 
     return Scaffold(

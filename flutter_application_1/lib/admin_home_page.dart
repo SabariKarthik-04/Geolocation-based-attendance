@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminHomePage extends StatefulWidget {
   final MyData data;
@@ -17,12 +14,6 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize any necessary components or data here
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -48,7 +39,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               child: const Text("Logout"),
               onPressed: () {
                 Navigator.of(context).pop();
-                logout();
+                GoRouter.of(context).go('/');
               },
             ),
           ],
@@ -57,23 +48,27 @@ class _AdminHomePageState extends State<AdminHomePage> {
     );
   }
 
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    final _storage = FlutterSecureStorage();
-    await prefs.setBool('isLoggedIn', false);
-    await _storage.deleteAll();
-    context.pushReplacement('/');
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Use a list of widgets to switch between pages based on selected index
     final List<Widget> _pages = [
       _buildAdminHomeContent(),
-      SettingsPage(data: widget.data),
+      SettingsPage(data:widget.data ),
     ];
 
     return Scaffold(
-      body: _pages[_selectedIndex],
+      appBar: AppBar(
+        title: const Text(
+          'Admin Home',
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
+        backgroundColor: const Color.fromARGB(255, 77, 79, 79),
+        leading: Container(),
+        leadingWidth: 12,
+        elevation: 6,
+        shadowColor: Colors.blueGrey,
+      ),
+      body: _pages[_selectedIndex],  // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -86,15 +81,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.logout),
-            label: 'Logout',
+            label: "Logout",
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: (index) {
           if (index == 2) {
-            _showLogoutConfirmation();
+            _showLogoutConfirmation(); // Handle logout separately
           } else {
-            _onItemTapped(index);
+            _onItemTapped(index);  // Handle home/settings navigation
           }
         },
       ),
@@ -102,17 +97,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
   }
 
   Widget _buildAdminHomeContent() {
-    const String addEmployee = "Add New Employee";
-    const String addAdmin = "Add New Admin";
-    const String geofencing = "Add or Change Geofencing";
-    const String attendanceStatus = "Employees Attendance Status";
-    const String updateEmployee = "Update Employee Details";
-    const String dashboard = "Dashboard";
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 30),
           const Text(
