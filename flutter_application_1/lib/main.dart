@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/Login.dart';
 import 'package:flutter_application_1/autoLogin.dart';
 import 'package:flutter_application_1/local_notifications.dart';
@@ -13,8 +14,11 @@ import 'admin_home_page.dart';
 import 'home_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  // Ensures that widgets are initialized before locking orientation.
+  
+  // Initialize the local notifications
   await LocalNotifications.init();
+
 
   bool isLoggedIn = await checkLoginStatus();
   runApp(MyApp(isLoggedIn: isLoggedIn));
@@ -70,6 +74,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+=======
   late final GoRouter _router;
 
   @override
@@ -115,6 +121,7 @@ class _MyAppState extends State<MyApp> {
       ],
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

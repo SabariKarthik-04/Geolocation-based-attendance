@@ -110,11 +110,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
     const String dashboard = "Dashboard";
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
           const SizedBox(height: 30),
+
           const Text(
             'Admin Home',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
