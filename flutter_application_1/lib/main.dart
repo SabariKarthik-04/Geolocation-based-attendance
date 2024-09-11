@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/Login.dart';
 import 'package:flutter_application_1/autoLogin.dart';
 import 'package:flutter_application_1/local_notifications.dart';
