@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
 
 Future<MyData> authenticateUser(String username, String password) async {
   if (username == 'EMP1' && password == '12345') {
-    return MyData(id: 1, username: 'EMP1', password: '12345', branchId: 1, admin: false, expiryDate: "08-09-2024");
+    return MyData(id: 1, username: 'EMP1', password: '12345', branchId: 1, admin: false, expiryDate: "15-09-2024");
   } else if (username == 'ADMIN' && password == '12345') {
     return MyData(id: 2, username: 'ADMIN', password: '12345', branchId: 1, admin: true, expiryDate: "15-09-2024");
   } else {

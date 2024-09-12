@@ -27,7 +27,7 @@ public class AttendanceDBController {
         if ("Attendance saved successfully.".equals(response)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
-        else if("Attendance Updated Sucessfully".equals(response)) {
+        else if("Attendance updated successfully.".equals(response)) {
         	return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         else if("Attendance already marked or no changes detected.".equals(response)) {

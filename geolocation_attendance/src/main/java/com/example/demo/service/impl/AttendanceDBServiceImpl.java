@@ -110,9 +110,10 @@ public class AttendanceDBServiceImpl {
     }
 
 
-    private boolean shouldUpdateCheckOut(String newCheckOut, String existingCheckIn) {
-        return newCheckOut != null && !newCheckOut.equals("null") && existingCheckIn != null && !existingCheckIn.equals("null");
+    private boolean shouldUpdateCheckOut(String newCheckOut, String existingCheckOut) {
+        return newCheckOut != null && !newCheckOut.equals("null") && (existingCheckOut == null || "null".equals(existingCheckOut));
     }
+
     private double calculateHours(String inTime, String outTime) {
         LocalTime startTime = LocalTime.parse(inTime);
         LocalTime endTime = LocalTime.parse(outTime);

@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
   void getLocationData() {
     if (widget.data.branchId == 1) {
       dummyLatitude = 10.9807761;
-      dummyLongitude = 78.0787206;
+      dummyLongitude = 18.0787206;
     } else if (widget.data.branchId == 2) {
       dummyLatitude = 10.000;
       dummyLongitude = 10.000;

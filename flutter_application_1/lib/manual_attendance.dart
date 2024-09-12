@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/model.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_application_1/fetch.dart';
+import 'package:flutter_application_1/model.dart';
 
 class UserManualAttendance extends StatefulWidget {
   final MyData data;
@@ -34,6 +35,95 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
     super.dispose();
   }
 
+  DateTime convert12To24Hour(String time12h) {
+    try {
+      final RegExp timePattern = RegExp(r'(\d{1,2}):(\d{2})\s*(AM|PM)', caseSensitive: false);
+      final match = timePattern.firstMatch(time12h);
+
+      if (match == null) {
+        throw FormatException("Invalid time format. Expected format is hh:mm AM/PM.");
+      }
+
+      int hour = int.parse(match.group(1)!);
+      int minute = int.parse(match.group(2)!);
+      String period = match.group(3)!.toUpperCase();
+
+      if (period == 'PM' && hour != 12) {
+        hour += 12;
+      } else if (period == 'AM' && hour == 12) {
+        hour = 0;
+      }
+
+      return DateTime(2024, 1, 1, hour, minute); // Date part is arbitrary
+    } catch (e) {
+      throw FormatException("Invalid time format. Expected format is hh:mm AM/PM.");
+    }
+  }
+
+  Future<bool> ManualCheckin(String value) async {
+    try {
+      DateTime time = convert12To24Hour(value);
+      String formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+      String formattedTime = DateFormat('HH:mm:ss').format(time);
+
+      UserAttendance userAttendance = UserAttendance(
+        userId: widget.data.id,
+        userName: widget.data.username,
+        date: formattedDate,
+        autoGeoAttendance: AutomatedGeoAttendance(
+          geoCheckIn: null,
+          geoCheckOut: null,
+          geoTotalHours: null,
+        ),
+        manualGeoAttendance: ManualAttendance(
+          manualCheckIn: formattedTime,
+          manualCheckOut: null,
+          manualTotalHours: null,
+        ),
+      );
+
+      await newUserAttendance(userAttendance);
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to check in. Please try again.")),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> ManualCheckOut(String value) async {
+    try {
+      DateTime time = convert12To24Hour(value);
+      String formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+      String formattedTime = DateFormat('HH:mm:ss').format(time);
+
+      UserAttendance userAttendance = UserAttendance(
+        userId: widget.data.id,
+        userName: widget.data.username,
+        date: formattedDate,
+        autoGeoAttendance: AutomatedGeoAttendance(
+          geoCheckIn: null,
+          geoCheckOut: null,
+          geoTotalHours: null,
+        ),
+        manualGeoAttendance: ManualAttendance(
+          manualCheckIn: null,
+          manualCheckOut: formattedTime,
+          manualTotalHours: null,
+        ),
+      );
+
+      await newUserAttendance(userAttendance);
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to check out. Please try again.")),
+      );
+      return false;
+    }
+  }
+
   Future<void> _showConfirmationDialog(String action) async {
     var formattedTime = DateFormat('hh:mm a').format(_currentTime);
 
@@ -57,9 +147,11 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
                   if (action == 'Check In') {
                     _checkInTime = formattedTime;
                     checkInController.text = formattedTime;
+                    ManualCheckin('${checkInController.text} ${_selectedCheckInAmPm}');
                   } else if (action == 'Check Out') {
                     _checkOutTime = formattedTime;
                     checkOutController.text = formattedTime;
+                    ManualCheckOut('${checkOutController.text} ${_selectedCheckOutAmPm}');
                   }
                 });
                 Navigator.of(context).pop();
@@ -113,15 +205,18 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manual Attendance'),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 30),
+              const Text(
+                'Home',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 30),
               Center(
                 child: Column(
                   children: [
@@ -165,17 +260,12 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
                                 },
                               ),
                             ),
-                            keyboardType: TextInputType.datetime,
-                            onFieldSubmitted: (value) {
+                            onChanged: (String value) {
                               _updateTimeFromInput(value, isCheckIn: true);
                             },
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
+                        const SizedBox(width: 20),
                         Expanded(
                           child: TextFormField(
                             controller: checkOutController,
@@ -201,37 +291,25 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
                                 },
                               ),
                             ),
-                            keyboardType: TextInputType.datetime,
-                            onFieldSubmitted: (value) {
+                            onChanged: (String value) {
                               _updateTimeFromInput(value, isCheckIn: false);
                             },
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _showConfirmationDialog('Check In');
-                          },
-                          icon: const Icon(Icons.login),
-                          label: const Text('Check In'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          ),
+                        ElevatedButton(
+                          onPressed: () => _showConfirmationDialog('Check In'),
+                          child: const Text('Check In'),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _showConfirmationDialog('Check Out');
-                          },
-                          icon: const Icon(Icons.logout),
-                          label: const Text('Check Out'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          ),
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                          onPressed: () => _showConfirmationDialog('Check Out'),
+                          child: const Text('Check Out'),
                         ),
                       ],
                     ),
@@ -246,129 +324,34 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
   }
 }
 
-class AnalogClock extends StatefulWidget {
+class AnalogClock extends StatelessWidget {
   final DateTime currentTime;
   final ValueChanged<DateTime> onTimeChanged;
 
-  const AnalogClock({
-    Key? key,
-    required this.currentTime,
-    required this.onTimeChanged,
-  }) : super(key: key);
-
-  @override
-  _AnalogClockState createState() => _AnalogClockState();
-}
-
-class _AnalogClockState extends State<AnalogClock> {
-  late double _hourAngle;
-  late double _minuteAngle;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateAnglesFromTime(widget.currentTime);
-  }
-
-  @override
-  void didUpdateWidget(covariant AnalogClock oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentTime != widget.currentTime) {
-      _updateAnglesFromTime(widget.currentTime);
-    }
-  }
-
-  void _updateAnglesFromTime(DateTime time) {
-    setState(() {
-      _hourAngle =
-          ((time.hour % 12) + time.minute / 60) * pi / 6 - (pi / 2);
-      _minuteAngle = time.minute * pi / 30 - (pi / 2);
-    });
-  }
-
-  DateTime _calculateTimeFromAngles() {
-    int hour = (((_hourAngle + pi / 2) / (pi / 6)).floor() % 12).toInt();
-    int minute = ((_minuteAngle + pi / 2) / (pi / 30)).toInt();
-    return DateTime(0, 0, 0, hour, minute);
-  }
+  const AnalogClock({super.key, required this.currentTime, required this.onTimeChanged});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onPanUpdate: (details) {
-        final center = Offset(200 / 2, 200 / 2);
-        final radius = min(200 / 2, 200 / 2);
-        final offset = details.localPosition - center;
-        final angle = atan2(offset.dy, offset.dx);
-
-        if (details.localPosition.dx > center.dx) {
-          setState(() {
-            _hourAngle = angle - (pi / 6 * widget.currentTime.hour / 12) - (pi / 6);
-            _minuteAngle = angle - (pi / 30 * widget.currentTime.minute) - (pi / 30);
-          });
-          widget.onTimeChanged(_calculateTimeFromAngles());
-        }
-      },
-      child: CustomPaint(
-        size: Size(200, 200),
-        painter: AnalogClockPainter(
-          hourAngle: _hourAngle,
-          minuteAngle: _minuteAngle,
-        ),
+    return Container(
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black, width: 2),
+      ),
+      child: Stack(
+        children: [
+          // Drawing clock face
+          Center(
+            child: Text(
+              DateFormat('hh:mm a').format(currentTime),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+          ),
+          // Drawing clock hands
+          // You can add logic to draw clock hands based on currentTime
+        ],
       ),
     );
-  }
-}
-
-class AnalogClockPainter extends CustomPainter {
-  final double hourAngle;
-  final double minuteAngle;
-
-  AnalogClockPainter({
-    required this.hourAngle,
-    required this.minuteAngle,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = min(size.width / 2, size.height / 2);
-
-    final paint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke;
-
-    final hourHandPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 8.0;
-
-    final minuteHandPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 4.0;
-
-    canvas.drawCircle(center, radius, paint);
-    canvas.drawCircle(center, radius - 8, paint);
-
-    final hourHandLength = radius * 0.5;
-    final minuteHandLength = radius * 0.8;
-
-    canvas.drawLine(center, Offset(
-      center.dx + hourHandLength * cos(hourAngle),
-      center.dy + hourHandLength * sin(hourAngle),
-    ), hourHandPaint);
-
-    canvas.drawLine(center, Offset(
-      center.dx + minuteHandLength * cos(minuteAngle),
-      center.dy + minuteHandLength * sin(minuteAngle),
-    ), minuteHandPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
