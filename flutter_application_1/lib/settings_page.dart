@@ -4,7 +4,15 @@ import 'package:flutter_application_1/model.dart';
 
 class SettingsPage extends StatefulWidget {
   final MyData data;
-  const SettingsPage({super.key, required this.data});
+  final ValueChanged<bool> onThemeChanged; // Callback for theme change
+  final bool isDarkTheme; // Current theme
+
+  const SettingsPage({
+    super.key,
+    required this.data,
+    required this.onThemeChanged,
+    required this.isDarkTheme,
+  });
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -12,17 +20,16 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   late Future<UserData> _userDataFuture;
-  bool _isDarkTheme = false;
+  late bool _isDarkTheme;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the Future when the widget is first created
     _userDataFuture = getUserDatafromDb();
+    _isDarkTheme = widget.isDarkTheme; // Initialize from the passed value
   }
 
   Future<UserData> getUserDatafromDb() async {
-    // Fetch user data from the database or API
     return await getUserData(widget.data.id);
   }
 
@@ -52,6 +59,19 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   const SizedBox(height: 20),
 
+                  // Dark theme toggle switch
+                  SwitchListTile(
+                    title: const Text('Dark Theme'),
+                    value: _isDarkTheme,
+                    onChanged: (value) {
+                      setState(() {
+                        _isDarkTheme = value;
+                      });
+                      widget.onThemeChanged(_isDarkTheme); // Trigger the callback
+                    },
+                    secondary: const Icon(Icons.dark_mode),
+                  ),
+
                   // Profile Section with ExpansionTile
                   ExpansionTile(
                     leading: const Icon(Icons.person),
@@ -71,13 +91,14 @@ class _SettingsPageState extends State<SettingsPage> {
                               Center(
                                 child: CircleAvatar(
                                   radius: 80,
-                                  backgroundImage: AssetImage('assets/image/profile.png'),
+                                  backgroundImage:
+                                      const AssetImage('assets/image/profile.png'),
                                 ),
                               ),
                               const SizedBox(height: 30),
                               Text(
                                 userData.userName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -85,41 +106,48 @@ class _SettingsPageState extends State<SettingsPage> {
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.phone, color: Colors.blue),
-                                  SizedBox(width: 8),
-                                  Text(userData.userMobileNumber, style: TextStyle(fontSize: 16)),
+                                  const Icon(Icons.phone, color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text(userData.userMobileNumber,
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.email, color: Colors.blue),
-                                  SizedBox(width: 8),
-                                  Text(userData.userMail, style: TextStyle(fontSize: 16)),
+                                  const Icon(Icons.email, color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text(userData.userMail,
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.calendar_today, color: Colors.blue),
-                                  SizedBox(width: 8),
-                                  Text('DOB: ${userData.userDOB}', style: TextStyle(fontSize: 16)),
+                                  const Icon(Icons.calendar_today,
+                                      color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text('DOB: ${userData.userDOB}',
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.cake, color: Colors.blue),
-                                  SizedBox(width: 8),
-                                  Text('Age: ${DateTime.now().year - int.parse(userData.userDOB.split('-')[2])}', style: TextStyle(fontSize: 16)),
+                                  const Icon(Icons.cake, color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                      'Age: ${DateTime.now().year - int.parse(userData.userDOB.split('-')[2])}',
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.work, color: Colors.blue),
-                                  SizedBox(width: 8),
-                                  Text('Posting: ${userData.userPosting}', style: TextStyle(fontSize: 16)),
+                                  const Icon(Icons.work, color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Text('Posting: ${userData.userPosting}',
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ],
@@ -139,7 +167,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Text('Password Change Screen', style: TextStyle(fontSize: 16)),
+                            Text('Password Change Screen',
+                                style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -156,7 +185,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Text('Notification Settings Screen', style: TextStyle(fontSize: 16)),
+                            Text('Notification Settings Screen',
+                                style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -173,7 +203,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Text('Language Settings Screen', style: TextStyle(fontSize: 16)),
+                            Text('Language Settings Screen',
+                                style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),

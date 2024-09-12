@@ -13,13 +13,13 @@ import 'admin_home_page.dart';
 import 'home_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();  // Ensures that widgets are initialized before locking orientation.
+  WidgetsFlutterBinding.ensureInitialized(); // Ensures widgets are initialized before locking orientation.
   
   // Initialize the local notifications
   await LocalNotifications.init();
 
-
   bool isLoggedIn = await checkLoginStatus();
+  
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
@@ -31,8 +31,7 @@ Future<bool> checkLoginStatus() async {
   if (!isLoggedIn) return false;
 
   if (expiryDateStr != null) {
-    final formatter = DateFormat('dd-MM-yyyy');
-    final expiryDate = formatter.parse(expiryDateStr);
+    final expiryDate = DateFormat('dd-MM-yyyy').parse(expiryDateStr);
     if (DateTime.now().isAfter(expiryDate)) {
       await prefs.setBool('isLoggedIn', false);
       return false;
@@ -53,7 +52,7 @@ Future<MyData?> retrieveUserData() async {
     return MyData(
       id: int.parse(userId),
       username: username,
-      password: '', 
+      password: '',
       admin: isAdmin == 'true',
       branchId: 1,
       expiryDate: expiryDate ?? '',
@@ -73,13 +72,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   late final GoRouter _router;
+  bool _isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
+    _loadThemePreference();
+    _setupRouter();
+  }
 
+  void _setupRouter() {
     _router = GoRouter(
       routes: [
         GoRoute(
@@ -120,11 +123,28 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  Future<void> _loadThemePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    });
+  }
+
+  Future<void> _toggleTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+      prefs.setBool('isDarkMode', _isDarkMode);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
       routerConfig: _router,
     );
   }

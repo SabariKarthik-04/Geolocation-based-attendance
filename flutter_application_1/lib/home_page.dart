@@ -19,11 +19,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  bool _isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
     initLocationService();
+    _loadThemePreference();
+  }
+
+   void _onThemeChanged(bool isDarkMode) {
+    setState(() {
+      _isDarkMode = isDarkMode;
+    });
+    _saveThemePreference(isDarkMode);
+  }
+
+  // Load theme preference from storage
+  Future<void> _loadThemePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    });
+  }
+
+  // Save theme preference to storage
+  Future<void> _saveThemePreference(bool isDarkMode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
   }
 
   void _onItemTapped(int index) {
@@ -111,7 +134,7 @@ class _HomePageState extends State<HomePage> {
   void getLocationData() {
     if (widget.data.branchId == 1) {
       dummyLatitude = 10.9807761;
-      dummyLongitude = 18.0787206;
+      dummyLongitude = 78.0787206;
     } else if (widget.data.branchId == 2) {
       dummyLatitude = 10.000;
       dummyLongitude = 10.000;
@@ -252,7 +275,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       _buildHomeContent(),
-      SettingsPage(data: widget.data,),
+      SettingsPage(data: widget.data,onThemeChanged: _onThemeChanged,isDarkTheme: _isDarkMode,),
     ];
 
     return Scaffold(

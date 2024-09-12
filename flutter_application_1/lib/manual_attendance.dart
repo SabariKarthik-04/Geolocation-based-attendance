@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_1/fetch.dart';
 import 'package:flutter_application_1/model.dart';
@@ -83,11 +83,18 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
       );
 
       await newUserAttendance(userAttendance);
+      LocalNotifications.showSimpleNotification(
+        title: "Check In",
+        body: "Successfully Sign In Continue To work<3!!",
+        payload: "check In"
+      );
       return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to check in. Please try again.")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to check in. Please try again.")),
+        );
+      }
       return false;
     }
   }
@@ -115,11 +122,18 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
       );
 
       await newUserAttendance(userAttendance);
+      LocalNotifications.showSimpleNotification(
+        title: "Check Out",
+        body: "Successfully Completed The Day Bye Bye See You Tommorow!!",
+        payload: "check out"
+      );
       return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to check out. Please try again.")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to check out. Please try again.")),
+        );
+      }
       return false;
     }
   }
@@ -143,18 +157,20 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  if (action == 'Check In') {
-                    _checkInTime = formattedTime;
-                    checkInController.text = formattedTime;
-                    ManualCheckin('${checkInController.text} ${_selectedCheckInAmPm}');
-                  } else if (action == 'Check Out') {
-                    _checkOutTime = formattedTime;
-                    checkOutController.text = formattedTime;
-                    ManualCheckOut('${checkOutController.text} ${_selectedCheckOutAmPm}');
-                  }
-                });
-                Navigator.of(context).pop();
+                if (mounted) {
+                  setState(() {
+                    if (action == 'Check In') {
+                      _checkInTime = formattedTime;
+                      checkInController.text = formattedTime;
+                      ManualCheckin('${checkInController.text} ${_selectedCheckInAmPm}');
+                    } else if (action == 'Check Out') {
+                      _checkOutTime = formattedTime;
+                      checkOutController.text = formattedTime;
+                      ManualCheckOut('${checkOutController.text} ${_selectedCheckOutAmPm}');
+                    }
+                  });
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text('Confirm'),
             ),
@@ -183,12 +199,14 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
         }
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid time format. Please use hh:mm AM/PM."),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Invalid time format. Please use hh:mm AM/PM."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -298,18 +316,21 @@ class _UserManualAttendanceState extends State<UserManualAttendance> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
-                          onPressed: () => _showConfirmationDialog('Check In'),
-                          child: const Text('Check In'),
+                          onPressed: () {
+                            _showConfirmationDialog('Check In');
+                          },
+                          child: const Text('Manual Check In'),
                         ),
-                        const SizedBox(width: 20),
                         ElevatedButton(
-                          onPressed: () => _showConfirmationDialog('Check Out'),
-                          child: const Text('Check Out'),
+                          onPressed: () {
+                            _showConfirmationDialog('Check Out');
+                          },
+                          child: const Text('Manual Check Out'),
                         ),
                       ],
                     ),
@@ -328,7 +349,11 @@ class AnalogClock extends StatelessWidget {
   final DateTime currentTime;
   final ValueChanged<DateTime> onTimeChanged;
 
-  const AnalogClock({super.key, required this.currentTime, required this.onTimeChanged});
+  const AnalogClock({
+    Key? key,
+    required this.currentTime,
+    required this.onTimeChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -337,20 +362,13 @@ class AnalogClock extends StatelessWidget {
       height: 200,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.black, width: 2),
+        color: Colors.blueAccent,
       ),
-      child: Stack(
-        children: [
-          // Drawing clock face
-          Center(
-            child: Text(
-              DateFormat('hh:mm a').format(currentTime),
-              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-          ),
-          // Drawing clock hands
-          // You can add logic to draw clock hands based on currentTime
-        ],
+      child: Center(
+        child: Text(
+          DateFormat('hh:mm a').format(currentTime),
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
       ),
     );
   }

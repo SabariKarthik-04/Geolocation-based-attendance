@@ -3,6 +3,7 @@ import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHomePage extends StatefulWidget {
   final MyData data;
@@ -15,12 +16,41 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   int _selectedIndex = 0;
+  bool _isDarkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadThemePreference();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
+  void _onThemeChanged(bool isDarkMode) {
+    setState(() {
+      _isDarkMode = isDarkMode;
+    });
+    _saveThemePreference(isDarkMode);
+  }
+
+  // Load theme preference from storage
+  Future<void> _loadThemePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    });
+  }
+
+  // Save theme preference to storage
+  Future<void> _saveThemePreference(bool isDarkMode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
+  }
+
 
   void _showLogoutConfirmation() {
     showDialog(
@@ -54,7 +84,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     // Use a list of widgets to switch between pages based on selected index
     final List<Widget> _pages = [
       _buildAdminHomeContent(),
-      SettingsPage(data:widget.data ),
+      SettingsPage(data:widget.data,onThemeChanged: _onThemeChanged,isDarkTheme: _isDarkMode, ),
     ];
 
     return Scaffold(
