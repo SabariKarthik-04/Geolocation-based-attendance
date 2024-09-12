@@ -4,19 +4,18 @@ class MyData {
   final String password;
   final bool admin;
   final int branchId;
+  final String expiryDate; 
 
-  MyData({required this.id, required this.username,required this.password,required this.admin,required this.branchId});
-
-  factory MyData.fromJson(Map<String, dynamic> json) {
-    return MyData(
-      id: json['userId'],
-      username: json['username'],
-      password: json['password'],
-      admin: json['admin'],
-      branchId:json['branchId'],
-    );
-  }
+  MyData({
+    required this.id,
+    required this.username,
+    required this.password,
+    required this.admin,
+    required this.branchId,
+    required this.expiryDate,
+  });
 }
+
 
 class OfficeLocationData{
   final int branchId;

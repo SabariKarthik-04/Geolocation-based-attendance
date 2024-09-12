@@ -26,7 +26,14 @@ public class AttendanceDBController {
         String response = AttService.saveAttendance(attendance);
         if ("Attendance saved successfully.".equals(response)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } else {
+        }
+        else if("Attendance updated successfully.".equals(response)) {
+        	return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else if("Attendance already marked or no changes detected.".equals(response)) {
+        	return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(response);
+        }
+        else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }

@@ -9,10 +9,11 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.AttendanceDBModel;
 
 @Repository
-public interface AttendanceDBRepo extends MongoRepository<AttendanceDBModel, Integer>{
+public interface AttendanceDBRepo extends MongoRepository<AttendanceDBModel, String> {
 	AttendanceDBModel findByUserId(int userId);
-	
+
 	List<AttendanceDBModel> findAllByUserId(int userId);
-	
+
 	Optional<AttendanceDBModel> findByUserIdAndDate(int userId, String date);
+
 }
