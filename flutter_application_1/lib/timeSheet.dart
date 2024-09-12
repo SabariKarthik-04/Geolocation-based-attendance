@@ -30,7 +30,8 @@ class _TimesheetState extends State<Timesheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<Map<String, List<UserAttendance>>>(
           future: getAttData(),
@@ -186,6 +187,7 @@ class _TimesheetState extends State<Timesheet> {
           },
         ),
       ),
+    )
     );
   }
 }

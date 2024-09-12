@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/local_notifications.dart';
 import 'package:flutter_application_1/model.dart';
 import 'package:flutter_application_1/settings_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,6 +45,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
       _isDarkMode = prefs.getBool('isDarkMode') ?? false;
     });
   }
+    Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final _storage = FlutterSecureStorage();
+    await prefs.setBool('isLoggedIn', false);
+    await _storage.deleteAll();
+    context.pushReplacement('/');
+  }
 
   // Save theme preference to storage
   Future<void> _saveThemePreference(bool isDarkMode) async {
@@ -70,7 +78,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               child: const Text("Logout"),
               onPressed: () {
                 Navigator.of(context).pop();
-                GoRouter.of(context).go('/');
+                logout();
               },
             ),
           ],
@@ -87,19 +95,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
       SettingsPage(data:widget.data,onThemeChanged: _onThemeChanged,isDarkTheme: _isDarkMode, ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Admin Home',
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-        ),
-        backgroundColor: const Color.fromARGB(255, 77, 79, 79),
-        leading: Container(),
-        leadingWidth: 12,
-        elevation: 6,
-        shadowColor: Colors.blueGrey,
-      ),
-      body: _pages[_selectedIndex],  // Display the selected page
+    return 
+    Scaffold(
+      body:SingleChildScrollView(child: _pages[_selectedIndex],),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -131,6 +129,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 30),
           const Text(

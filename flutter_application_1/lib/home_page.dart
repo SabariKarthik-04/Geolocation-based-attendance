@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: SingleChildScrollView(child:_pages[_selectedIndex],),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
