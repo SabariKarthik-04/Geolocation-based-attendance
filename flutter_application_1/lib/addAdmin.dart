@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Addemployee extends StatefulWidget {
-  const Addemployee({super.key});
+class Addadmin extends StatefulWidget {
+  const Addadmin({super.key});
 
   @override
-  State<Addemployee> createState() => _AddemployeeState();
+  State<Addadmin> createState() => _AddadminState();
 }
 
-class _AddemployeeState extends State<Addemployee> {
+class _AddadminState extends State<Addadmin> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
@@ -17,21 +17,20 @@ class _AddemployeeState extends State<Addemployee> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _cnfrmpasswordController = TextEditingController();
-
   bool _obsecureText=true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
+        child:Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 50,),
               Text(
-                "Personal Info of Employee",
+                "Personal Info Of Admin",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Column(
@@ -41,7 +40,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: "Name",
-                  hintText: "Enter the name of the employee",
+                  hintText: "Enter the name of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -51,7 +50,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: "Email",
-                  hintText: "Enter the email of the employee",
+                  hintText: "Enter the email of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.mail_outline_rounded),
                 ),
@@ -61,7 +60,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _mobileNoController,
                 decoration: InputDecoration(
                   labelText: "Mobile Number",
-                  hintText: "Enter the mobile number of the employee",
+                  hintText: "Enter the mobile number of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.phone),
                 ),
@@ -71,7 +70,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _dobController,
                 decoration: InputDecoration(
                   labelText: "Date of birth",
-                  hintText: "Enter the DOB of the employee",
+                  hintText: "Enter the DOB of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.calendar_today_sharp),
                 ),
@@ -81,7 +80,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _postingController,
                 decoration: InputDecoration(
                   labelText: "Posting",
-                  hintText: "Enter the posting of the employee",
+                  hintText: "Enter the posting of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.work_outline_rounded),
                 ),
@@ -91,7 +90,7 @@ class _AddemployeeState extends State<Addemployee> {
                 onPressed: () {
                   // Action on save
                 },
-                child: Text('Save Employee'),
+                child: Text('Save Admin'),
               ),
             ],
           ),
@@ -100,7 +99,7 @@ class _AddemployeeState extends State<Addemployee> {
             children: [
               const SizedBox(height: 50,),
               Text(
-                "Login Info Of Employee",
+                "Login Info Of Admin",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Column(
@@ -109,7 +108,7 @@ class _AddemployeeState extends State<Addemployee> {
                 controller: _usernameController,
                 decoration: InputDecoration(
                   labelText: "User Name",
-                  hintText: "Enter the user name of the employee",
+                  hintText: "Enter the user name of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -120,7 +119,7 @@ class _AddemployeeState extends State<Addemployee> {
                 obscureText: _obsecureText,
                 decoration: InputDecoration(
                   labelText: "PassWord",
-                  hintText: "Enter the Password of the employee",
+                  hintText: "Enter the Password of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                   suffixIcon: IconButton(
@@ -139,7 +138,7 @@ class _AddemployeeState extends State<Addemployee> {
                 obscureText: _obsecureText,
                 decoration: InputDecoration(
                   labelText: "PassWord",
-                  hintText: "Enter the Password of the employee",
+                  hintText: "Enter the Password of the admin",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -147,18 +146,18 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20,),
               ElevatedButton(
                 onPressed: () {
-                  // Action on save
+                  
                 },
                 child: Text('Save Login Info'),
               ),
-          ]
-          )
-          ],
-          )
-          ]
-          )
-        ),
-      ),
+              ]
+         )
+        ]
+      )
+      ]
+      )
+      )
+    )
     );
   }
 }

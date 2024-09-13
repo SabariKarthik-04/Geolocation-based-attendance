@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Login.dart';
+import 'package:flutter_application_1/addAdmin.dart';
 import 'package:flutter_application_1/addEmployee.dart';
 import 'package:flutter_application_1/autoLogin.dart';
 import 'package:flutter_application_1/local_notifications.dart';
@@ -123,7 +124,11 @@ class _MyAppState extends State<MyApp> {
         GoRoute(
         path: '/AddEmployee',
         builder: (context, state) => Addemployee()
-        )
+        ),
+        GoRoute(
+        path: "/AddAdmin",
+        builder: (context, state) => Addadmin(),
+        ),
       ],
     );
   }

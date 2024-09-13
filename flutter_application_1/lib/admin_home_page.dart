@@ -144,11 +144,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               context.push('/AddEmployee');
             },
             () {
-              LocalNotifications.showSimpleNotification(
-                title: "addAdmin",
-                body: "Functionality to add a new admin.",
-                payload: "AddAdmin"
-              );
+              context.push('/AddAdmin');
             }
           ),
           const SizedBox(height: 20),
