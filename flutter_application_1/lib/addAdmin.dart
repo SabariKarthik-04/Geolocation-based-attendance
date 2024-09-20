@@ -29,7 +29,7 @@ class _AddadminState extends State<Addadmin> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 50,),
-              Text(
+              const Text(
                 "Personal Info Of Admin",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -38,7 +38,7 @@ class _AddadminState extends State<Addadmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Name",
                   hintText: "Enter the name of the admin",
                   border: OutlineInputBorder(),
@@ -48,7 +48,7 @@ class _AddadminState extends State<Addadmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Email",
                   hintText: "Enter the email of the admin",
                   border: OutlineInputBorder(),
@@ -58,7 +58,7 @@ class _AddadminState extends State<Addadmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _mobileNoController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Mobile Number",
                   hintText: "Enter the mobile number of the admin",
                   border: OutlineInputBorder(),
@@ -68,7 +68,7 @@ class _AddadminState extends State<Addadmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _dobController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Date of birth",
                   hintText: "Enter the DOB of the admin",
                   border: OutlineInputBorder(),
@@ -78,7 +78,7 @@ class _AddadminState extends State<Addadmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _postingController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Posting",
                   hintText: "Enter the posting of the admin",
                   border: OutlineInputBorder(),
@@ -90,7 +90,7 @@ class _AddadminState extends State<Addadmin> {
                 onPressed: () {
                   // Action on save
                 },
-                child: Text('Save Admin'),
+                child: const Text('Save Admin'),
               ),
             ],
           ),
@@ -98,7 +98,7 @@ class _AddadminState extends State<Addadmin> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 50,),
-              Text(
+              const Text(
                 "Login Info Of Admin",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -106,7 +106,7 @@ class _AddadminState extends State<Addadmin> {
               children: [ const SizedBox(height: 20),
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "User Name",
                   hintText: "Enter the user name of the admin",
                   border: OutlineInputBorder(),
@@ -120,8 +120,8 @@ class _AddadminState extends State<Addadmin> {
                 decoration: InputDecoration(
                   labelText: "PassWord",
                   hintText: "Enter the Password of the admin",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.person),
                   suffixIcon: IconButton(
                     icon: Icon(_obsecureText ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {
@@ -136,7 +136,7 @@ class _AddadminState extends State<Addadmin> {
               TextFormField(
                 controller: _cnfrmpasswordController,
                 obscureText: _obsecureText,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "PassWord",
                   hintText: "Enter the Password of the admin",
                   border: OutlineInputBorder(),
@@ -148,7 +148,7 @@ class _AddadminState extends State<Addadmin> {
                 onPressed: () {
                   
                 },
-                child: Text('Save Login Info'),
+                child: const Text('Save Login Info'),
               ),
               ]
          )

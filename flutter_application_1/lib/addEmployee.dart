@@ -30,7 +30,7 @@ class _AddemployeeState extends State<Addemployee> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 50,),
-              Text(
+              const Text(
                 "Personal Info of Employee",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -39,7 +39,7 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Name",
                   hintText: "Enter the name of the employee",
                   border: OutlineInputBorder(),
@@ -49,7 +49,7 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Email",
                   hintText: "Enter the email of the employee",
                   border: OutlineInputBorder(),
@@ -59,7 +59,7 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _mobileNoController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Mobile Number",
                   hintText: "Enter the mobile number of the employee",
                   border: OutlineInputBorder(),
@@ -69,7 +69,7 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _dobController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Date of birth",
                   hintText: "Enter the DOB of the employee",
                   border: OutlineInputBorder(),
@@ -79,7 +79,7 @@ class _AddemployeeState extends State<Addemployee> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _postingController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Posting",
                   hintText: "Enter the posting of the employee",
                   border: OutlineInputBorder(),
@@ -91,7 +91,7 @@ class _AddemployeeState extends State<Addemployee> {
                 onPressed: () {
                   // Action on save
                 },
-                child: Text('Save Employee'),
+                child: const Text('Save Employee'),
               ),
             ],
           ),
@@ -99,7 +99,7 @@ class _AddemployeeState extends State<Addemployee> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 50,),
-              Text(
+              const Text(
                 "Login Info Of Employee",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -107,7 +107,7 @@ class _AddemployeeState extends State<Addemployee> {
               children: [ const SizedBox(height: 20),
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "User Name",
                   hintText: "Enter the user name of the employee",
                   border: OutlineInputBorder(),
@@ -121,8 +121,8 @@ class _AddemployeeState extends State<Addemployee> {
                 decoration: InputDecoration(
                   labelText: "PassWord",
                   hintText: "Enter the Password of the employee",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.person),
                   suffixIcon: IconButton(
                     icon: Icon(_obsecureText ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {
@@ -137,7 +137,7 @@ class _AddemployeeState extends State<Addemployee> {
               TextFormField(
                 controller: _cnfrmpasswordController,
                 obscureText: _obsecureText,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "PassWord",
                   hintText: "Enter the Password of the employee",
                   border: OutlineInputBorder(),
@@ -149,7 +149,7 @@ class _AddemployeeState extends State<Addemployee> {
                 onPressed: () {
                   // Action on save
                 },
-                child: Text('Save Login Info'),
+                child: const Text('Save Login Info'),
               ),
           ]
           )
