@@ -7,6 +7,7 @@ import 'package:flutter_application_1/settings_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/geofencing.dart';
 
 class AdminHomePage extends StatefulWidget {
   final MyData data;
@@ -154,11 +155,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             "geofencing",
             "attendanceStatus",
             () {
-              LocalNotifications.showSimpleNotification(
-                title: "geofencing",
-                body: "Functionality to add or change geofencing.",
-                payload: "Geofencing"
-              );
+              context.push('/geofencing');
             },
             () {
               LocalNotifications.showSimpleNotification(
